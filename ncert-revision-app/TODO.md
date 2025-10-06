@@ -1,0 +1,6 @@
+- [x] Install next-auth library
+- [x] Create NextAuth configuration in pages/api/auth/[...nextauth].js
+- [x] Create LoginModal component in components/LoginModal.jsx
+- [x] Update Header.jsx to integrate login/logout functionality
+- [x] Update _app.js to add SessionProvider for NextAuth
+- [ ] Test login functionality
