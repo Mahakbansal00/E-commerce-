@@ -1,5 +1,16 @@
+# Dependencies
 node_modules
+
+# Next.js build output
 .next
-.env.local
+out
+
+# Environment variables
 .env
+.env.local
+.env.development
+.env.production
+.env.test
+
+# System files
 .DS_Store
