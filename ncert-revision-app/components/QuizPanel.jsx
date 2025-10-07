@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { apiFetch } from '../lib/apiUtils';
 
 export default function QuizPanel({ pdf }) {
   const [quiz, setQuiz] = useState(null);
@@ -9,12 +10,12 @@ export default function QuizPanel({ pdf }) {
   const generate = async () => {
     setLoading(true);
     try {
-      const res = await fetch('/api/generateQuiz', {
+      const data = await apiFetch('/api/generateQuiz', {
         method: 'POST',
         headers: { 'content-type': 'application/json' },
         body: JSON.stringify({ pdf }),
       });
-      const data = await res.json();
+      
       if (data.quiz) {
         setQuiz(data.quiz);
         setAnswers({});
@@ -24,7 +25,7 @@ export default function QuizPanel({ pdf }) {
       }
     } catch (err) {
       console.error("Error generating quiz:", err);
-      alert("Failed to generate quiz");
+      alert(`Failed to generate quiz: ${err.message}`);
     } finally {
       setLoading(false);
     }
@@ -33,12 +34,12 @@ export default function QuizPanel({ pdf }) {
   const submit = async () => {
     if (!quiz) return;
     try {
-      const res = await fetch('/api/gradeQuiz', {
+      const result = await apiFetch('/api/gradeQuiz', {
         method: 'POST',
         headers: { 'content-type': 'application/json' },
         body: JSON.stringify({ quiz, answers }),
       });
-      const result = await res.json();
+      
       if (result.score != null) {
         setSubmittedResult(result);
 
@@ -56,7 +57,7 @@ export default function QuizPanel({ pdf }) {
       }
     } catch (err) {
       console.error("Error submitting quiz:", err);
-      alert("Failed to submit quiz");
+      alert(`Failed to submit quiz: ${err.message}`);
     }
   };
 

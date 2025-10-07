@@ -1,5 +1,6 @@
 
 import React, { useState } from 'react'
+import { apiFetch } from '../lib/apiUtils'
 
 export default function ChatPanel({ pdf }) {
   const [messages, setMessages] = useState([
@@ -9,15 +10,25 @@ export default function ChatPanel({ pdf }) {
 
   const send = async () => {
     if(!input) return
-    setMessages(prev=> [...prev, { role: 'user', text: input }])
+    const userQuery = input
+    setMessages(prev=> [...prev, { role: 'user', text: userQuery }])
     setInput('')
-    const res = await fetch('/api/ragQuery', {
-      method: 'POST',
-      headers: {'content-type':'application/json'},
-      body: JSON.stringify({ pdf, query: input })
-    })
-    const j = await res.json()
-    setMessages(prev=> [...prev, { role: 'assistant', text: j.answer }])
+    
+    try {
+      const data = await apiFetch('/api/ragQuery', {
+        method: 'POST',
+        headers: {'content-type':'application/json'},
+        body: JSON.stringify({ pdf, query: userQuery })
+      })
+      
+      setMessages(prev=> [...prev, { role: 'assistant', text: data.answer || 'No response received.' }])
+    } catch (err) {
+      console.error("Error in RAG query:", err)
+      setMessages(prev=> [...prev, { 
+        role: 'assistant', 
+        text: `Error: ${err.message}` 
+      }])
+    }
   }
 
   return (

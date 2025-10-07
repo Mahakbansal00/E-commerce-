@@ -3,19 +3,19 @@ import CredentialsProvider from 'next-auth/providers/credentials'
 
 const users = []
 
-export default NextAuth({
+const authOptions = {
   providers: [
     CredentialsProvider({
-      name: 'credentials',
+      name: 'Credentials',
       credentials: {
         email: { label: 'Email', type: 'email' },
         password: { label: 'Password', type: 'password' }
       },
       async authorize(credentials) {
-        // Check if user exists
+        if (!credentials?.email || !credentials?.password) return null;
+
         let user = users.find(u => u.email === credentials.email)
         if (!user) {
-          // Register new user
           user = {
             id: users.length + 1,
             name: credentials.email.split('@')[0],
@@ -24,30 +24,32 @@ export default NextAuth({
           }
           users.push(user)
         }
-        // Validate password
+
         if (user.password === credentials.password) {
           return { id: user.id, name: user.name, email: user.email }
         }
+
         return null
       }
     })
   ],
-  session: {
-    strategy: 'jwt'
-  },
-  pages: {
-    signIn: '/', // Use the home page for sign in
-  },
+  session: { strategy: 'jwt' },
   callbacks: {
     async jwt({ token, user }) {
       if (user) {
         token.id = user.id
+        token.name = user.name
+        token.email = user.email
       }
       return token
     },
     async session({ session, token }) {
       session.user.id = token.id
+      session.user.name = token.name
+      session.user.email = token.email
       return session
     }
   }
-})
+}
+
+export default NextAuth(authOptions)

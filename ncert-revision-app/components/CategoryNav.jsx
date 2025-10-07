@@ -32,8 +32,8 @@ export default function CategoryNav() {
     <nav className="max-w-7xl mx-auto flex justify-between border-b border-gray-300 pb-2 mb-4">
       {categories.map((cat) => (
         <div key={cat.name} className="flex flex-col items-center text-xs text-gray-600 cursor-pointer hover:text-black">
-          {/* <div className="mb-1">{cat.icon}</div> */}
-          {/* <div>{cat.name}</div> */}
+          <div className="mb-1">{cat.icon}</div>
+          <div>{cat.name}</div>
         </div>
       ))}
     </nav>

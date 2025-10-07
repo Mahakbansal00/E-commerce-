@@ -1,2 +1,0 @@
-- [x] Update lib/llm.js prompt to generate JSON-structured quiz questions
-- [ ] Test quiz generation functionality
