@@ -2,13 +2,11 @@
   "name": "ncert-revision-app",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://Mahakbansal00.github.io/ncert-revision-app",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "predeploy": "npm run build",
-    "deploy": "gh-pages -d out"
+    "lint": "next lint"
   },
   "dependencies": {
     "@headlessui/react": "^1.7.18",
@@ -29,7 +27,6 @@
   },
   "devDependencies": {
     "autoprefixer": "^10.4.20",
-    "gh-pages": "^6.3.0",
     "postcss": "^8.4.47",
     "tailwindcss": "^3.4.3"
   }
