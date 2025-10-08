@@ -1,7 +1,10 @@
 {
     "version": 2,
-    "routes": [
-      { "src": "/(.*)", "dest": "/" }
+    "name": "ncert-revision-app",
+    "builds": [
+      {
+        "src": "package.json",
+        "use": "@vercel/static-build"
+      }
     ]
   }
-  

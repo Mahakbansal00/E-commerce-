@@ -6,9 +6,8 @@
  * @returns {string} - The full API path with basePath if needed
  */
 export function getApiPath(path) {
-  // In production with GitHub Pages, basePath is '/ncert-revision-app'
-  // In development, basePath is empty
-  const basePath = process.env.NODE_ENV === 'production' ? '/ncert-revision-app' : '';
+  // Use environment variable if set, otherwise no base path for Vercel deployment
+  const basePath = process.env.NEXT_PUBLIC_BASE_PATH || '';
   
   // Ensure path starts with /
   const normalizedPath = path.startsWith('/') ? path : `/${path}`;

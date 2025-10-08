@@ -34,6 +34,7 @@ const authOptions = {
     })
   ],
   session: { strategy: 'jwt' },
+  secret: process.env.NEXTAUTH_SECRET, // ADD THIS LINE
   callbacks: {
     async jwt({ token, user }) {
       if (user) {

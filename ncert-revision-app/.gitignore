@@ -14,3 +14,5 @@ out
 
 # System files
 .DS_Store
+.vercel/*.local
+.vercel/*.local
