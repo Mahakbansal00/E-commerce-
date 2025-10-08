@@ -23,22 +23,14 @@ export default function SourceSelector({ selected, onSelect }) {
     setUploading(true)
     try {
       const reader = new FileReader()
-      reader.onload = async () => {
+      reader.onload = () => {
         const base64 = reader.result.split(',')[1]
-        const data = await apiFetch('/api/uploadPdf', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ fileName: file.name, fileData: base64 })
-        })
-        if (data && data.path) {
-          const newPdf = { name: file.name, path: data.path }
-          const updated = [...uploadedPdfs, newPdf]
-          setUploadedPdfs(updated)
-          localStorage.setItem('uploadedPdfs', JSON.stringify(updated))
-          onSelect(newPdf.path)  // Automatically select the newly uploaded PDF
-        } else {
-          alert('Upload failed: ' + (data.error || 'Unknown error'))
-        }
+        const dataUrl = reader.result
+        const newPdf = { name: file.name, path: dataUrl, base64 }
+        const updated = [...uploadedPdfs, newPdf]
+        setUploadedPdfs(updated)
+        localStorage.setItem('uploadedPdfs', JSON.stringify(updated))
+        onSelect(dataUrl)  // Automatically select the newly uploaded PDF
       }
       reader.readAsDataURL(file)
     } catch (error) {

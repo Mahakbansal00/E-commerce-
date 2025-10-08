@@ -7,10 +7,24 @@ export default async function handler(req, res) {
   if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
 
   try {
-    const { pdf } = req.body;
+    const { pdf, pdfData } = req.body;
     let text = '';
 
-    if (pdf) {
+    if (pdfData) {
+      // Extract text from the uploaded PDF data
+      try {
+        const dataBuffer = Buffer.from(pdfData, 'base64');
+        const data = await pdfParse(dataBuffer);
+        text = data.text.replace(/\s+/g, ' ').trim().substring(0, 10000);
+
+        if (!text) {
+          return res.status(400).json({ error: "No text extracted from PDF" });
+        }
+      } catch (pdfError) {
+        console.error("PDF parsing error:", pdfError);
+        return res.status(500).json({ error: "Failed to parse PDF" });
+      }
+    } else if (pdf) {
       // Extract text from the specified PDF
       const filePath = path.join(process.cwd(), 'public', pdf);
       if (!fs.existsSync(filePath)) {

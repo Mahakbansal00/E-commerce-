@@ -35,7 +35,7 @@ export default function Home() {
             <PdfViewer file={selectedPdf} uploadedPdfs={uploadedPdfs} />
           </div>
           <div className="bg-white p-4 rounded shadow">
-            <QuizPanel pdf={selectedPdf} />
+            <QuizPanel pdf={selectedPdf} uploadedPdfs={uploadedPdfs} />
           </div>
           <div className="bg-white p-4 rounded shadow">
             <ChatPanel pdf={selectedPdf} />

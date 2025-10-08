@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { apiFetch } from '../lib/apiUtils';
 
-export default function QuizPanel({ pdf }) {
+export default function QuizPanel({ pdf, uploadedPdfs }) {
   const [quiz, setQuiz] = useState(null);
   const [answers, setAnswers] = useState({});
   const [loading, setLoading] = useState(false);
@@ -10,12 +10,25 @@ export default function QuizPanel({ pdf }) {
   const generate = async () => {
     setLoading(true);
     try {
+      let body;
+      if (pdf.startsWith('data:')) {
+        // Uploaded PDF, find base64
+        const uploadedPdf = uploadedPdfs.find(p => p.path === pdf);
+        if (!uploadedPdf) {
+          alert("Uploaded PDF data not found.");
+          return;
+        }
+        body = { pdfData: uploadedPdf.base64 };
+      } else {
+        // Sample PDF, send path
+        body = { pdf };
+      }
       const data = await apiFetch('/api/generateQuiz', {
         method: 'POST',
         headers: { 'content-type': 'application/json' },
-        body: JSON.stringify({ pdf }),
+        body: JSON.stringify(body),
       });
-      
+
       if (data.quiz) {
         setQuiz(data.quiz);
         setAnswers({});
